@@ -61,7 +61,7 @@ export default function Transaction() {
         <CurrencyInput
           label="Valor (R$)"
           value={amount}
-          onChangeValue={setAmount}
+          onChangeValue={(value) => setAmount(value ?? 0)}
         />
 
         <Input

@@ -30,12 +30,14 @@ export default function InProgress() {
   async function fetchTargetDetails() {
     try {
       const response = await targetDatabase.show(Number(params.id))
-      setDetails({
-        name: response.name,
-        current: numberToCurrency(response.current),
-        target: numberToCurrency(response.amount),
-        percentage: response.percentage,
-      })
+      if (response) {
+        setDetails({
+          name: response.name,
+          current: numberToCurrency(response.current),
+          target: numberToCurrency(response.amount),
+          percentage: response.percentage,
+        })
+      }
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível carregar os detalhes da meta')
       console.log(error)

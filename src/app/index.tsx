@@ -31,6 +31,7 @@ export default function Index() {
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível carregar as metas.')
       console.log(error)
+      return []
     }
   }
 
@@ -39,19 +40,24 @@ export default function Index() {
       const response = await transactionsDatabase.summary()
 
       return {
-        total: numberToCurrency(response.input + response.output),
+        total: numberToCurrency((response?.input ?? 0) + (response?.output ?? 0)),
         input: {
           label: 'Entradas',
-          value: numberToCurrency(response.input),
+          value: numberToCurrency(response?.input ?? 0),
         },
         output: {
           label: 'Saídas',
-          value: numberToCurrency(response.output),
+          value: numberToCurrency(response?.output ?? 0),
         },
       }
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível carregar o resumo.')
       console.log(error)
+      return {
+        total: numberToCurrency(0),
+        input: { label: 'Entradas', value: numberToCurrency(0) },
+        output: { label: 'Saídas', value: numberToCurrency(0) },
+      }
     }
   }
 
@@ -83,12 +89,12 @@ export default function Index() {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar barStyle="light-content" />
-      <HomeHeader data={summary} />
+      <HomeHeader data={summary!} />
 
       <List
         title="Metas"
         data={targets}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id!}
         renderItem={({ item }) => (
           <Target
             data={item}
